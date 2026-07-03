@@ -11,7 +11,7 @@ services:
       RABBITMQ_DEFAULT_USER: "guest"
       RABBITMQ_DEFAULT_PASS: "guest"
     volumes:
-      - data/rabbitmq:/var/lib/rabbitmq
+      - rabbitmq_data:/var/lib/rabbitmq
     healthcheck:
       test: rabbitmq-diagnostics -q check_port_connectivity
       interval: 10s
@@ -24,7 +24,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - data/postgresql/pgdata:/var/lib/postgresql/data
+      - postgresql_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: citrine
       POSTGRES_USER: citrine
@@ -99,7 +99,7 @@ services:
       MINIO_BROWSER_REDIRECT_URL: http://localhost:9011
       MINIO_SERVER_URL: http://localhost:9000
     volumes:
-      - data/minio:/data
+      - minio_data:/data
     command: server /data --console-address ":9001"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
@@ -159,5 +159,7 @@ services:
       start_period: 5s
 
 volumes:
-  data:
+  rabbitmq_data:
+  postgresql_data:
+  minio_data:
   hasura-metadata:
